@@ -45,3 +45,12 @@
   background-size: cover;
   background-position: center;
 }
+
+.box:hover .delete {
+  display: block;
+}
+
+.delete {
+  display: none;
+  color: red;
+}

@@ -1,31 +1,44 @@
 const container = document.getElementById("grid-container");
 
-// for (let i = 1; i < 13; i++) {
-//     var box = document.createElement("div");
-//     box.innerHTML = i;
-//     box.className = "box";
-//     container.appendChild(box);
-// }
-
+// Add
 const image = document.getElementById("image_input");
 var upload_image = "";
 var image_array = [];
+var counter = 0;
 
-image_input.addEventListener("change", function() {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-            upload_image = reader.result;
-            var box = document.createElement("div");
-            box.className = "box"
-            box.style.backgroundImage = `url(${upload_image})`;
-            image_array.push(box);
-            for (let i = 0; i < image_array.length; i++) {
-                container.appendChild(image_array[i]);
-                //use counter thing
-            }
-            // document.querySelector("#i" + counter.toString()).style.backgroundImage = `url(${upload_image})`;
-            // document.querySelector("#i" + counter.toString()).style.backgroundImage = `url(${upload_image})`;
-            // counter += 1;
-        });
-        reader.readAsDataURL(this.files[0]);
-})
+function display() {
+    for (let i = 0; i < image_array.length; i++) {
+        container.innerHTML += image_array[i];
+    }
+}
+
+//Add
+function addItem() {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+        upload_image = reader.result;
+        var box = 
+        `
+            <div class="box" data-index="${counter}" style='background-image: url(${upload_image});'>
+                <button class="delete" data-index="${counter}">x</button>
+            </div>
+        `
+        image_array.push(box);
+        counter += 1;
+        container.innerHTML = "";
+        display();
+    });
+    reader.readAsDataURL(this.files[0]);
+}
+
+//Delete
+function deleteItem(e) {
+    if (e.target.matches('.delete')) {
+        image_array[e.target.dataset.index] = "";
+        container.innerHTML = "";
+        display();
+    }
+}
+
+image.addEventListener("change", addItem); //image_input also works, don't know why
+container.addEventListener("click", deleteItem);
