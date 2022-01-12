@@ -1,9 +1,13 @@
+import { Routes, Route } from 'react-router-dom';
+import Home from "./Components/Home"
+import Category from "./Components/Category"
 
 function App() {
   return (
-    <div className="App">
-      
-    </div>
+    <Routes>
+      <Route path='/' element={<Home />} />
+      <Route path='/:category' element={<Category />} />
+    </Routes>
   );
 }
 
