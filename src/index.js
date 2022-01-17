@@ -9,7 +9,6 @@ import Navbar from "./Components/Navbar"
 ReactDOM.render(
   <Router>
     <React.StrictMode>
-      <Navbar />
       <App />
     </React.StrictMode>
   </Router>,
