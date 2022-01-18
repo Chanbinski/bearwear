@@ -2,7 +2,7 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from "react"
 
 import { onAuthStateChanged, signOut } from "firebase/auth"
-import { ref, uploadBytes, getDownloadURL, listAll, } from "firebase/storage"
+import { ref, uploadBytes, getDownloadURL, listAll, deleteObject } from "firebase/storage"
 import { auth, storage } from "../firebase-config"
 
 import Navbar from "./Navbar";
@@ -13,12 +13,18 @@ function capitalize(string) {
 }
 
 function Grid(props) {
+
+    function deleteFromFirebase(url) {
+        props.delete(url);
+    }
+
     return (
         <div className="mt-20 mx-20 grid gap-10 grid-cols-4 grid-flow-row">
             {
                 props.images.map(url => (
                     (
-                        <div key={url.toString()} className="overflow-hidden h-48">
+                        <div key={url.toString()} className="w-60 h-60 group relative">
+                            <button className="absolute right-0 text-red-500 text-2xl font-base hidden group-hover:block" onClick={() => deleteFromFirebase(url)}>x</button>
                             <img src={url} className="w-full h-full object-cover" alt="clothing"/>
                         </div>
                     )
@@ -49,26 +55,26 @@ function Category(props) {
 
     const getImages = () => {
         if (user != null) {
+            //let storageRef = storage.ref();
             const listRef = ref(storage, `${user.uid}/${category}`)
             setImageURLs([]);
-            listAll(listRef)
-                .then((res) => {
-                    res.items.forEach((itemRef) => {             
-                        const urlRef = ref(storage, itemRef._location.path_);
-                        getDownloadURL(urlRef)
-                            .then((url) => {
-                                setImageURLs(oldArray => [...oldArray, url]);
-                            });
+            listAll(listRef).then((res) => {
+                res.items.forEach((itemRef) => {           
+                    const path = itemRef._location.path_;
+                    const urlRef = ref(storage, path);
+                getDownloadURL(urlRef).then((url) => {
+                        setImageURLs(oldArray => [...oldArray, url].sort()); //When we do sort outside, it givs an error
                     });
-                }).catch((error) => {
-                    console.log(error);
                 });
+            }).catch((error) => {
+                console.log(error);
+            });
         }
     }
 
     useEffect(() => {
         getImages();
-    }, [user]);
+    }, [user]); //deleting this dependency crashes react
 
     const upload = () => {
 
@@ -80,19 +86,21 @@ function Category(props) {
 
         uploadBytes(storageRef, image).then((snapshot) => {
             console.log('Uploaded a blob or file!');
-          
-            // const urlRef = ref(storage, `${user.uid}/${category}/${time}`);
-
-            // // get the link from storage and push it to the array
-
-            // getDownloadURL(urlRef)
-            //     .then((url) => {
-            //         setImageURLs(oldArray => [...oldArray, url]);
-            //     });
             getImages();
         });
 
     }
+
+    function deleteFromFirebase(url) {
+        let pictureRef = ref(storage, url);
+        deleteObject(pictureRef).then(() => {
+            setImageURLs(imageURLs.filter((image) => image !== url));
+            //alert("Picture is deleted successfully!");
+        }).catch((error) => {
+            console.log(error);
+        });
+      };
+
     return (
         <>
             <Navbar />
@@ -111,7 +119,7 @@ function Category(props) {
                         Upload
                     </button>
                 </div>
-                <Grid images={imageURLs}/>
+                <Grid images={imageURLs} delete={deleteFromFirebase}/>
             </div>
         </>
     )

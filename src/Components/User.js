@@ -5,7 +5,6 @@ import { auth } from "../firebase-config"
 
 import { Link, useNavigate } from "react-router-dom"
 import Navbar from "./Navbar"
-import Authentication from "./Authentication"
 
 
 function capitalize(string) {
@@ -32,9 +31,18 @@ function User() {
     const logout = async () => {
         await signOut(auth);
     }
+    useEffect(() => {
+        onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+            if (currentUser == null) {
+                history('/auth')
+            }  
+        })
+    });
 
     onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
+        console.log()
         if (currentUser == null) {
             history('/auth')
         }  
