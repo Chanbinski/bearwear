@@ -11,17 +11,11 @@ function SignIn() {
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
 
-    const [user, setUser] = useState({});
-
     const history = useNavigate();
-
-    onAuthStateChanged(auth, (currentUser) => {
-        setUser(currentUser);
-    })
 
     const login = async () => {
         try {
-            const user = await signInWithEmailAndPassword(
+            await signInWithEmailAndPassword(
                 auth, 
                 loginEmail, 
                 loginPassword

@@ -1,9 +1,4 @@
-import { useState, useEffect } from "react"
-
-import { onAuthStateChanged, signOut } from "firebase/auth"
-import { auth } from "../firebase-config"
-
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import Navbar from "./Navbar"
 
 
@@ -24,29 +19,7 @@ function Drawer(props) {
 }
 
 function User() {
-    const [user, setUser] = useState(null);
-    
-    const history = useNavigate();
 
-    const logout = async () => {
-        await signOut(auth);
-    }
-    useEffect(() => {
-        onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
-            if (currentUser == null) {
-                history('/auth')
-            }  
-        })
-    });
-
-    onAuthStateChanged(auth, (currentUser) => {
-        setUser(currentUser);
-        console.log()
-        if (currentUser == null) {
-            history('/auth')
-        }  
-    })
     return (
         <>
             <Navbar />

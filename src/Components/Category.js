@@ -6,7 +6,6 @@ import { ref, uploadBytes, getDownloadURL, listAll, deleteObject } from "firebas
 import { auth, storage } from "../firebase-config"
 
 import Navbar from "./Navbar";
-import Authentication from "./Authentication";
 
 function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -35,28 +34,24 @@ function Grid(props) {
 }
 
 function Category(props) {
-    const { category } = useParams();
-    // const location = useLocation();
-    // const { user } = location.state;
-    const history = useNavigate();
+  // const { category } = useParams();
     
     const [user, setUser] = useState({});
     const [image, setImage] = useState(null);
     const [imageURLs, setImageURLs] = useState([]);
 
+    //const categoryList = ["outer", "tops", "bottoms", "acessories", "dresses", "shoes"];
+
+    const history = useNavigate();
+
     onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
     })
     
-    const logout = async () => {
-        await signOut(auth);
-        history('/');
-    }
-
     const getImages = () => {
         if (user != null) {
             //let storageRef = storage.ref();
-            const listRef = ref(storage, `${user.uid}/${category}`)
+            const listRef = ref(storage, `${user.uid}/${props.name}`)
             setImageURLs([]);
             listAll(listRef).then((res) => {
                 res.items.forEach((itemRef) => {           
@@ -82,7 +77,7 @@ function Category(props) {
 
         // upload to storage
         var time = Date.now() + '';
-        const storageRef = ref(storage, `${user.uid}/${category}/${time}`);
+        const storageRef = ref(storage, `${user.uid}/${props.name}/${time}`);
 
         uploadBytes(storageRef, image).then((snapshot) => {
             console.log('Uploaded a blob or file!');
@@ -105,7 +100,7 @@ function Category(props) {
         <>
             <Navbar />
             <div className="flex flex-col justify-center items-center mt-20">
-                <div className="mt-4 text-5xl font-bold" id="title">{capitalize(category)}</div>
+                <div className="mt-4 text-5xl font-bold" id="title">{capitalize(props.name)}</div>
                 <div className="flex flex-row mt-5">
                     <input 
                         type="file" 

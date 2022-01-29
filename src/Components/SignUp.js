@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
 
-    const [registerName, setRegisterName] = useState("");
     const [registerEmail, setRegisterEmail] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
 
@@ -15,18 +14,11 @@ function SignUp() {
     const register = async () => {
         try {
             //Authentication
-            const user = await createUserWithEmailAndPassword(
+            await createUserWithEmailAndPassword(
                 auth,
                 registerEmail, 
                 registerPassword,
             );
-            
-            //Firestore
-            const createUser = await setDoc(doc(db, "users", user.user.uid), {
-                tops: [],
-                bottoms: []
-            });
-
             setRegisterEmail("");
             setRegisterPassword("");
             history('/');
