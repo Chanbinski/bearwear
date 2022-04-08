@@ -11,6 +11,10 @@ function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+function getName(string) {
+    return string.substring(0, string.indexOf('@'));
+}
+
 function Grid(props) {
 
     function deleteFromFirebase(url) {
@@ -40,17 +44,12 @@ function Category(props) {
     const [image, setImage] = useState(null);
     const [imageURLs, setImageURLs] = useState([]);
 
-    //const categoryList = ["outer", "tops", "bottoms", "acessories", "dresses", "shoes"];
-
-    const history = useNavigate();
-
     onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
     })
     
     const getImages = () => {
         if (user != null) {
-            //let storageRef = storage.ref();
             const listRef = ref(storage, `${user.uid}/${props.name}`)
             setImageURLs([]);
             listAll(listRef).then((res) => {
@@ -71,19 +70,17 @@ function Category(props) {
         getImages();
     }, [user]); //deleting this dependency crashes react
 
-    const upload = () => {
-
-        console.log(image)
+    const upload = (e) => {
 
         // upload to storage
         var time = Date.now() + '';
         const storageRef = ref(storage, `${user.uid}/${props.name}/${time}`);
 
         uploadBytes(storageRef, image).then((snapshot) => {
+            document.querySelector("#imageInput").value = null;
             console.log('Uploaded a blob or file!');
             getImages();
         });
-
     }
 
     function deleteFromFirebase(url) {
@@ -94,18 +91,21 @@ function Category(props) {
         }).catch((error) => {
             console.log(error);
         });
-      };
+    };
 
     return (
         <>
             <Navbar />
-            <div className="flex flex-col justify-center items-center mt-20">
-                <div className="mt-4 text-5xl font-bold" id="title">{capitalize(props.name)}</div>
+            <div className="flex flex-col justify-center items-center mt-12">
+                <div className="mt-4 text-4xl font-medium " id="title">
+                    <span className="font-semibold bg-clip-text text-transparent bg-gradient-to-br from-red-400 to-blue-600">{capitalize(getName(auth.currentUser.email))}</span>{"'s " + capitalize(props.name)}
+                </div>
                 <div className="flex flex-row mt-5">
-                    <input 
+                    <input
+                        id="imageInput"
                         type="file" 
                         className="text-xs" 
-                        onChange={(e)=>{setImage(e.target.files[0])}}
+                        onChange={(e) => setImage(e.target.files[0])}
                     />
                     <button 
                         className="text-xs"

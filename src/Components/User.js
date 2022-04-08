@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import { auth } from "../firebase-config"
 import Navbar from "./Navbar"
 
 
@@ -6,14 +7,22 @@ function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+function getName(string) {
+    return string.substring(0, string.indexOf('@'));
+}
+
 function Drawer(props) {
     return (
-        <li className="flex flex-col justify-center items-center mt-10">
-            <div className={`w-1/3 h-16 flex flex-col justify-center items-center ${props.color}`}>
-                <Link to={`/${props.category}`} className="font-medium text-white">
+        <li className="group flex flex-col justify-center items-center">
+            <Link 
+                to={`/${props.category}`} 
+                className={`w-full h-16 flex flex-col justify-center items-center relative bg-[url('/public/wood.webp')]`}>
+                <div 
+                    className="hidden group-hover:block font-medium text-white absolute right-3 top-1">
                     {capitalize(props.category)}
-                </Link>
-            </div>
+                </div>
+                <div className="font-bold text-sm text-white"> — </div>
+            </Link>
         </li>
     )
 }
@@ -23,14 +32,22 @@ function User() {
     return (
         <>
             <Navbar />
-            <ul className="list-none">
-                <Drawer category="outer" color="bg-amber-400" />
-                <Drawer category="tops" color="bg-amber-500" />
-                <Drawer category="bottoms" color="bg-amber-600" />
-                <Drawer category="accessories" color="bg-amber-700" />
-                <Drawer category="dresses" color="bg-amber-800" />
-                <Drawer category="shoes" color="bg-amber-900" />
-            </ul>
+            <div className="flex flex-col items-center">
+                <div className="mt-24 mb-8 text-4xl font-medium">
+                    <span className="font-semibold bg-clip-text text-transparent bg-gradient-to-br from-red-400 to-blue-600">
+                        {capitalize(getName(auth.currentUser.email))}
+                    </span>
+                    's Dresser
+                </div>
+                <ul className="list-none w-1/3 border-4 border-black divide-y-2 divide-black">
+                    <Drawer category="outer"/>
+                    <Drawer category="tops"/>
+                    <Drawer category="bottoms"/>
+                    <Drawer category="accessories"/>
+                    <Drawer category="dresses"/>
+                    <Drawer category="shoes"/>
+                </ul>
+            </div>
         </>
     )   
 }
