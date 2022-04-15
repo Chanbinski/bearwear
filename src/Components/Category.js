@@ -56,7 +56,7 @@ function Category(props) {
                 res.items.forEach((itemRef) => {           
                     const path = itemRef._location.path_;
                     const urlRef = ref(storage, path);
-                getDownloadURL(urlRef).then((url) => {
+                    getDownloadURL(urlRef).then((url) => {
                         setImageURLs(oldArray => [...oldArray, url].sort()); //When we do sort outside, it givs an error
                     });
                 });
