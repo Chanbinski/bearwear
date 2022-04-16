@@ -78,7 +78,7 @@ function Category(props) {
 
         uploadBytes(storageRef, image).then((snapshot) => {
             document.querySelector("#imageInput").value = null;
-            console.log('Uploaded a blob or file!');
+            setImage(null);
             getImages();
         });
     }
