@@ -76,11 +76,14 @@ function Category(props) {
         var time = Date.now() + '';
         const storageRef = ref(storage, `${user.uid}/${props.name}/${time}`);
 
-        uploadBytes(storageRef, image).then((snapshot) => {
-            document.querySelector("#imageInput").value = null;
+        if (image) {
+            const imageTemp = image;
             setImage(null);
-            getImages();
-        });
+            uploadBytes(storageRef, imageTemp).then((snapshot) => {
+                document.querySelector("#imageInput").value = null;
+                getImages();
+            });
+        }
     }
 
     function deleteFromFirebase(url) {
