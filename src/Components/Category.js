@@ -22,7 +22,7 @@ function Grid(props) {
     }
 
     return (
-        <div className="mt-20 mx-20 grid gap-10 grid-cols-4 grid-flow-row">
+        <div className="mt-20 lg:mx-20 grid gap-10 grid-cols-1 lg:grid-cols-4 grid-flow-row">
             {
                 props.images.map(url => (
                     (
@@ -100,7 +100,7 @@ function Category(props) {
         <>
             <Navbar />
             <div className="flex flex-col justify-center items-center mt-12">
-                <div className="mt-4 text-4xl font-medium " id="title">
+                <div className="mt-4 text-4xl text-center font-medium " id="title">
                     <span className="font-semibold bg-clip-text text-transparent bg-gradient-to-br from-red-400 to-blue-600">{capitalize(getName(auth.currentUser.email))}</span>{"'s " + capitalize(props.name)}
                 </div>
                 <div className="flex flex-row mt-5">
