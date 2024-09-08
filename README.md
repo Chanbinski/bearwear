@@ -8,7 +8,7 @@ Project Leaders: Chanbin Park, Rachel Xin
 Project Members: Amogh Maganahalli, Angel Mau, Annie Xu, Justin Xu, Michael Zhang  
 
 ## App
-Chanbin, Rachel: https://bearwear.vercel.app/ (Password must be 8 characters long when you sign up!) <br />
+Chanbin, Rachel: https://bearwear.vercel.app/ (Password must be 8 characters long when you sign up!) <br /><br />
 Amogh: https://bearwear-v2.vercel.app/  
 Angel: https://bear-wear-qmhdm95m7-angelm12.vercel.app  
 Justin: https://bearwear-justincxu.vercel.app/  
